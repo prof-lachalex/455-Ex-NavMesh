@@ -8,6 +8,8 @@ public class VehicleLogic : MonoBehaviour
     NavMeshAgent agent;
     List<Vector3> waypoints;
 
+    int currentWPIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,12 +23,16 @@ public class VehicleLogic : MonoBehaviour
         // GetComponentsInChildren retourne aussi le parent ...
         waypoints.Remove(waypointObject.transform.position);
 
-        agent.SetDestination(waypoints[0]);
+        currentWPIndex = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        { 
+            currentWPIndex = ++currentWPIndex % waypoints.Count;
+            agent.SetDestination(waypoints[currentWPIndex]);
+        }
     }
 }
